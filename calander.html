@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>calendar</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://rawgit.com/moment/moment/2.2.1/min/moment.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-firestore.js"></script>
+
+    <script>
+          // Your web app's Firebase configuration
+          var firebaseConfig = {
+            apiKey: "AIzaSyB9yRx9E49_OLiXIJycevHepYcEeQDemkM",
+            authDomain: "calendarappointment-b4e3d.firebaseapp.com",
+            databaseURL: "https://calendarappointment-b4e3d.firebaseio.com",
+            projectId: "calendarappointment-b4e3d",
+            storageBucket: "calendarappointment-b4e3d.appspot.com",
+            messagingSenderId: "953104905049",
+            appId: "1:953104905049:web:533a998440b76f468f5248"
+          };
+          // Initialize Firebase
+          firebase.initializeApp(firebaseConfig);
+        const firestore =firebase.firestore();
+        const settings = {timestampsInSnapshots:true}
+        firestore.settings(settings)
+        </script>
+  </head>
+  <body>
+  <input type="text" placeholder="Enter Title" id="texttile">
+      <input type="text" placeholder="Enter Date" id="datetxt">
+<button onclick="addNewEvent()" >Add</button>
+<script>
+    var events = firestore.collection('events')
+    function addNewEvent(){
+        var start = moment($("#datetxt").val()).toDate();
+        var title = $("#texttile").val();
+        var id = start.toString();
+        var event = {id: id, title: title, start: start};
+        // events.add(event)
+        firestore.collection('events').get()
+            .then((snapshot) => {
+                snapshot.forEach((doc) => {
+                    if(doc.data().id === id){console.log('error')}else {events.add(event)}
+                });
+            })
+            .catch((err) => {
+                console.log('Error getting documents', err);
+            });
+
+    }
+</script>
+  </body>
+</html>
+
+
